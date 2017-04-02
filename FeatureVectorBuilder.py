@@ -6,7 +6,7 @@ from nltk import word_tokenize
 
 class FeatureVector:
 
-    # we start building our feature vector here
+    # we start building our feature vectors here
     def build(self):
         trainX = [] # our training set features
         trainY = [] # our training set lables
@@ -34,7 +34,7 @@ class FeatureVector:
 
         return trainX, trainY
 
-    # we do text preprocessing in this method
+    # text preprocessing method
     def preprocess(self, text):
 
         # first, we clean the text
@@ -74,14 +74,14 @@ class FeatureVector:
 
         return text
 
-    # removing extra characters and cleaning the text
-    def cleaning(self, text):
-        text = text.replace("\n","")
-        return text
-
-    # stemming tokens
+    # spanish stemmer
     def stem_tokens(self, tokens, stemmer):
         stemmed = []
         for item in tokens:
             stemmed.append(stemmer.stem(item))
         return stemmed
+
+    # removing extra characters and cleaning the text
+    def cleaning(self, text):
+        text = text.replace("\n","")
+        return text
