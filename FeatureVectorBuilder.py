@@ -2,6 +2,7 @@ from nltk.corpus import stopwords
 from nltk.stem import SnowballStemmer
 from string import punctuation
 from nltk import word_tokenize
+import io
 
 
 class FeatureVector:
@@ -12,7 +13,7 @@ class FeatureVector:
         trainY = [] # our training set lables
 
         # first, we read our sentences from training data
-        with open('data/train.txt', 'r') as train:
+        with io.open('data/train.txt', 'r', encoding='utf8') as train:
             data = train.readlines()
 
         # now we loop over sentences and do preprocessing
@@ -84,4 +85,10 @@ class FeatureVector:
     # removing extra characters and cleaning the text
     def cleaning(self, text):
         text = text.replace("\n","")
-        return text
+        text = text.replace("]]>","")
+
+        text = text.split(" ")
+        # we should remove links from the sentence
+        cleaned = ' '.join([c for c in text if "http://" not in c and "@" not in c])
+
+        return cleaned
