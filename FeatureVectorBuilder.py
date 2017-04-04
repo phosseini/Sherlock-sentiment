@@ -7,33 +7,39 @@ import io
 
 class FeatureVector:
 
-    # we start building our feature vectors here
-    def build(self):
-        trainX = [] # our training set features
-        trainY = [] # our training set lables
+    def readData(self, path):
+        trainX = []  # our training set features
+        trainY = []  # our training set lables
 
         # first, we read our sentences from training data
-        with io.open('data/train.txt', 'r', encoding='utf8') as train:
+        with io.open(path, 'r', encoding='utf8') as train:
             data = train.readlines()
 
         # now we loop over sentences and do preprocessing
         for row in data:
             text = row.split("\t")
             if len(text[0]) == 1:
-                trainX.append(self.preprocess(text[1]))
+                trainX.append(text[1])
                 trainY.append(text[0])
 
-        # now that we have the preprocessed sentence we start building our vectors
-        # from sklearn.feature_extraction.text import CountVectorizer
-        # vectorizer = CountVectorizer(min_df=1)
-        # vectorizer.fit_transform(trainX)
+        return trainX, trainY
 
+    # we start building our feature vectors here
+    def build(self, trainX, trainY):
+
+        X_train = []
+
+        # now we loop over sentences and do preprocessing
+        for row in trainX:
+            X_train.append(self.preprocess(row))
+
+        # now that we have the preprocessed sentence we start building our vectors
         from sklearn.feature_extraction.text import TfidfVectorizer
         vectorizer = TfidfVectorizer(min_df=1)
-        X = vectorizer.fit_transform(trainX)
-        trainX = X.toarray()
+        X = vectorizer.fit_transform(X_train)
+        X_train = X.toarray()
 
-        return trainX, trainY
+        return X_train, trainY
 
     # text preprocessing method
     def preprocess(self, text):

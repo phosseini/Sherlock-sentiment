@@ -1,10 +1,11 @@
 from FeatureVectorBuilder import FeatureVector
 from ModelBuilder import ModelBuilder
 
-# first of all, we build our feature vectors
-fv = FeatureVector();
-trainX, trainY = fv.build()
+fv = FeatureVector()
 
-# now that we have our feature vectors, we build and test our model
+# reading our labeled training data from text file
+trainX, trainY = fv.readData('data/train.txt')
+
+# now we build and test our model
 mb = ModelBuilder()
 mb.svm(trainX, trainY)
