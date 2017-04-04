@@ -1,9 +1,6 @@
 from sklearn import svm
-from sklearn.cross_validation import train_test_split
 from FeatureVectorBuilder import FeatureVector
-from numba import njit
 import numpy as np
-import io
 
 
 class ModelBuilder:
@@ -26,6 +23,7 @@ class ModelBuilder:
         # now we apply the dimensionality reduction method before training our model
         from DimReduction import DimReduction
         dr = DimReduction()
+        X_ = np.array(X_)
         X_ = dr.pca(X_)
         # -------------------------------------------
 
@@ -39,4 +37,22 @@ class ModelBuilder:
         # training our model
         clf = svm.SVC(kernel='linear', C=1).fit(X_train, Y_train)
 
-        print('Model Accuracy: ' + clf.score(X_test, Y_test))
+        # now we predict test set labels using our trained model
+        predictedY = clf.predict(X_test)
+        # converting the numpy array to a python list
+        predictedY = predictedY.tolist()
+
+        # evaluating the model using accuracy
+        # accuracy = # of correctly predicted labels / # number of tweets in test set
+        correct = 0
+        for index, item in enumerate(Y_test):
+            if predictedY[index] == Y_test[index]:
+                correct += 1
+
+        # calculating accuracy value
+        accuracy = correct / len(Y_test)
+
+        # if we are going to use the model score for evaluation
+        # print(clf.score(X_test, Y_test))
+
+        print(accuracy)
